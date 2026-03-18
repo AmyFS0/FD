@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Día del Padre, Papá!</title>
+    <style>
+        body {
+            background-color: #e3f2fd; /* Azul claro */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Cuadro blanco principal */
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            z-index: 10;
+            max-width: 450px;
+            border: 2px solid #bbdefb;
+            position: relative; 
+            overflow: hidden; /* Mantiene los corazoncitos dentro */
+        }
+
+        h1 {
+            color: #d32f2f;
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            position: relative;
+            z-index: 15;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 15;
+        }
+
+        .imagen-papa {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 15; /* Por encima de los corazoncitos */
+        }
+
+        /* Corazón gigante de fondo */
+        #corazon-fondo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff1744;
+            font-size: 150px;
+            z-index: 1;
+            transition: all 0.4s ease-out;
+            user-select: none;
+        }
+
+        /* Botón */
+        button {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 5px 15px rgba(211, 47, 47, 0.3);
+            font-weight: bold;
+            position: relative;
+            z-index: 20;
+        }
+
+        button:hover { transform: scale(1.05); }
+
+        /* Estilo para los corazoncitos que parpadean */
+        .corazon-pispileo {
+            position: absolute;
+            color: #ff8a80; /* Rojo suave / Rosado */
+            font-size: 18px;
+            z-index: 5;
+            animation: pispileo var(--duracion) infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes pispileo {
+            0%, 100% { opacity: 0.1; transform: scale(0.8); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        /* Serpentinas externas */
+        .serpentina {
+            position: fixed;
+            top: -20px;
+            width: 6px;
+            height: 15px;
+            z-index: 20;
+            animation: caer 3s linear forwards;
+        }
+
+        @keyframes caer {
+            to { transform: translateY(110vh) rotate(720deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="corazon-fondo">❤</div>
+
+    <div class="container" id="cuadro-blanco">
+        <h1>¡Feliz Día del Padre!</h1>
+        <p>¡Te quiero muchísimo!</p>
+        
+        <img class="imagen-papa" src="pdh.png" alt="Papá e hija">
+        
+        <br>
+        <button onclick="crecerAmor()">¡Haz click aqui!</button>
+    </div>
+
+    <script>
+        let size = 150;
+        const corazonFondo = document.getElementById('corazon-fondo');
+        const cuadro = document.getElementById('cuadro-blanco');
+
+        // Función para crear los corazoncitos que parpadean al iniciar
+        function iniciarCorazones() {
+            for (let i = 0; i < 25; i++) {
+                const cora = document.createElement('div');
+                cora.innerHTML = "❤";
+                cora.className = 'corazon-pispileo';
+                
+                // Posiciones aleatorias dentro del cuadro
+                cora.style.left = Math.random() * 95 + "%";
+                cora.style.top = Math.random() * 95 + "%";
+                
+                // Duración de parpadeo aleatoria para que no brillen todos al mismo tiempo
+                cora.style.setProperty('--duracion', (Math.random() * 2 + 1) + "s");
+                
+                cuadro.appendChild(cora);
+            }
+        }
+
+        function crecerAmor() {
+            // 1. Crece el corazón de fondo
+            size += 50;
+            corazonFondo.style.fontSize = size + "px";
+
+            // 2. Si el corazón es muy grande, caen serpentinas
+            if (size > 450) {
+                lanzarSerpentinas();
+            }
+        }
+
+        function lanzarSerpentinas() {
+            for (let i = 0; i < 12; i++) {
+                const serp = document.createElement('div');
+                serp.className = 'serpentina';
+                serp.style.left = Math.random() * 100 + "vw";
+                serp.style.backgroundColor = Math.random() > 0.5 ? '#d32f2f' : '#bbdefb';
+                document.body.appendChild(serp);
+                setTimeout(() => serp.remove(), 3000);
+            }
+        }
+
+        // Ejecutar la creación de corazoncitos al abrir la web
+        window.onload = iniciarCorazones;
+    </script>
+
+</body>
+</html>
