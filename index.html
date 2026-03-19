@@ -25,7 +25,6 @@
             padding: 10px;
         }
 
-        /* Tamaños de texto controlados para móvil */
         h1 { 
             color: #d32f2f; 
             font-size: 1.8rem; 
@@ -67,16 +66,16 @@
             50% { opacity: 0.5; transform: scale(1.1); }
         }
 
-        /* CORAZÓN GIGANTE */
+        /* CORAZÓN GIGANTE CON CENTRADO FLAWLESS */
         #wrapper-corazon {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
             z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; /* FLEXBOX PARA CENTRADO PERFECTO */
+            align-items: center; /* Centrado vertical */
+            justify-content: center; /* Centrado horizontal */
             transition: transform 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
             pointer-events: none;
             opacity: 0;
@@ -90,11 +89,11 @@
             filter: drop-shadow(0 0 20px rgba(0,0,0,0.3));
         }
 
-        /* TEXTO DENTRO DEL CORAZÓN - AJUSTADO */
+        /* TEXTO DENTRO DEL CORAZÓN - CENTRADO */
         #mensaje-interno {
-            position: absolute;
+            position: absolute; /* Superpuesto al corazón */
             color: white;
-            font-size: 8vw; /* Texto fluido: se adapta al celular */
+            font-size: 8vw; /* Texto fluido */
             max-font-size: 40px;
             font-weight: bold;
             text-align: center;
@@ -128,7 +127,6 @@
             cursor: default;
         }
 
-        /* Ajuste extra para pantallas muy pequeñas */
         @media (max-height: 600px) {
             .imagen-papa { max-height: 200px; }
             h1 { font-size: 1.5rem; }
@@ -143,16 +141,16 @@
     </div>
 
     <div class="container">
-        <h1>¡Feliz Día, Pa!</h1>
+        <h1>¡Feliz Día del Padre!</h1>
         <p>¡Te quiero mucho!</p>
         <img class="imagen-papa" src="pdh.png" alt="Papá e hija">
         <br>
-        <button id="boton-amor" onclick="crecerAmor()">¡Haz crecer mi amor! ❤</button>
+        <button id="boton-amor" onclick="crecerAmor()">¡Haz click aqui! ❤</button>
     </div>
 
     <script>
         let escala = 0.2;
-        const limiteEscala = 1.2; // Escala máxima ajustada
+        const limiteEscala = 1.2; 
         const incremento = 0.2;
         let primerClick = true;
 
@@ -185,7 +183,7 @@
 
             if (escala >= limiteEscala) {
                 mensaje.style.opacity = "1";
-                boton.innerHTML = "¡Love You! ❤️";
+                boton.innerHTML = "❤️";
                 boton.classList.add('desactivado');
                 boton.onclick = null;
             }
