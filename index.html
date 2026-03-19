@@ -14,6 +14,7 @@
             min-height: 100vh;
             margin: 0;
             overflow: hidden;
+            position: relative;
         }
 
         .container {
@@ -21,10 +22,11 @@
             z-index: 10;
             width: 100%;
             max-width: 400px;
+            padding: 20px;
         }
 
-        h1 { color: #d32f2f; text-shadow: 2px 2px 4px white; }
-        p { font-weight: bold; text-shadow: 1px 1px 3px white; }
+        h1 { color: #d32f2f; text-shadow: 2px 2px 4px white; margin-bottom: 10px; }
+        p { font-weight: bold; text-shadow: 1px 1px 3px white; margin-bottom: 20px; }
 
         .imagen-papa {
             width: 100%;
@@ -34,7 +36,23 @@
             margin-bottom: 20px;
         }
 
-        /* CONTENEDOR DEL CORAZÓN Y EL TEXTO INTERNO */
+        /* CORAZONES FLOTANTES DEL FONDO */
+        .corazon-pispileo {
+            position: fixed;
+            color: #ff8a80;
+            font-size: 20px;
+            z-index: 1; /* Al fondo de todo */
+            animation: pispileo var(--duracion) infinite ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes pispileo {
+            0%, 100% { opacity: 0.1; transform: scale(0.8); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        /* CORAZÓN GIGANTE CON MENSAJE */
         #wrapper-corazon {
             position: fixed;
             top: 50%;
@@ -51,22 +69,21 @@
 
         #corazon-svg {
             color: #ff1744;
-            font-size: 250px; /* Tamaño base grande */
+            font-size: 280px; /* Un poco más grande para que quepa bien el texto */
             filter: drop-shadow(0 0 20px rgba(0,0,0,0.2));
         }
 
-        /* MENSAJE DENTRO DEL CORAZÓN */
         #mensaje-interno {
             position: absolute;
             color: white;
-            font-size: 40px;
+            font-size: 35px;
             font-weight: bold;
-            font-family: 'Arial', sans-serif;
             text-align: center;
-            width: 100%;
-            opacity: 0; /* Oculto al inicio */
+            width: 80%;
+            opacity: 0;
             transition: opacity 0.5s ease;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            line-height: 1.2;
         }
 
         button {
@@ -81,13 +98,13 @@
             position: relative;
             width: 100%;
             max-width: 280px;
-            transition: all 0.3s;
             font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         button.desactivado {
-            background-color: #9e9e9e;
-            opacity: 0.5;
+            background-color: #4caf50;
+            border-color: #a5d6a7;
             cursor: default;
         }
     </style>
@@ -109,30 +126,49 @@
 
     <script>
         let escala = 0.3;
-        const limiteEscala = 2.5; // Ajusta esto para que tape lo que quieras
+        const limiteEscala = 2.3; 
         const incremento = 0.4;
+        let primerClick = true;
+
+        // Función para crear los corazoncitos de fondo
+        function crearCorazonesFondo() {
+            const cantidad = 25;
+            for (let i = 0; i < cantidad; i++) {
+                const cora = document.createElement('div');
+                cora.innerHTML = "❤";
+                cora.className = 'corazon-pispileo';
+                cora.style.left = Math.random() * 100 + "vw";
+                cora.style.top = Math.random() * 100 + "vh";
+                cora.style.setProperty('--duracion', (Math.random() * 2 + 1) + "s");
+                document.body.appendChild(cora);
+            }
+        }
 
         function crecerAmor() {
             const wrapper = document.getElementById('wrapper-corazon');
             const mensaje = document.getElementById('mensaje-interno');
             const boton = document.getElementById('boton-amor');
 
-            // Aparece al primer click
-            wrapper.style.opacity = "1";
+            if (primerClick) {
+                wrapper.style.opacity = "1";
+                primerClick = false;
+            }
 
             if (escala < limiteEscala) {
                 escala += incremento;
                 wrapper.style.transform = `translate(-50%, -50%) scale(${escala})`;
             }
 
-            // Si llegamos al tope
             if (escala >= limiteEscala) {
-                mensaje.style.opacity = "1"; // Aparece el texto adentro
-                boton.innerHTML = "¡Feliz día! ❤️"; // Cambia el texto del botón
+                mensaje.style.opacity = "1";
+                boton.innerHTML = "¡Feliz día! ❤️";
                 boton.classList.add('desactivado');
                 boton.onclick = null;
             }
         }
+
+        // Ejecutar la creación de corazones al cargar la página
+        window.onload = crearCorazonesFondo;
     </script>
 </body>
 </html>
