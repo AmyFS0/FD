@@ -16,7 +16,6 @@
             padding: 15px;
             overflow: hidden;
             position: relative;
-            box-sizing: border-box;
         }
 
         .container {
@@ -25,23 +24,10 @@
             width: 100%;
             max-width: 400px;
             position: relative; 
-            box-sizing: border-box;
         }
 
-        h1 {
-            color: #d32f2f;
-            font-size: 2.2rem;
-            margin: 0 0 10px 0;
-            text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
-        }
-
-        p {
-            font-size: 1.2rem;
-            color: #333;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 3px rgba(255,255,255,0.8);
-        }
+        h1 { color: #d32f2f; font-size: 2.2rem; margin-bottom: 10px; text-shadow: 2px 2px 4px white; }
+        p { font-size: 1.2rem; color: #333; font-weight: bold; margin-bottom: 20px; text-shadow: 1px 1px 3px white; }
 
         .imagen-papa {
             width: 100%;
@@ -52,20 +38,18 @@
             border: 5px solid white;
         }
 
-        /* EL CORAZÓN GIGANTE - Oculto al inicio */
         #corazon-fondo {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.1); /* Empieza muy pequeño */
+            transform: translate(-50%, -50%) scale(0); 
             color: #ff1744;
             font-size: 150px;
-            z-index: 100; /* Al frente de todo */
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+            z-index: 100; 
+            transition: transform 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
             user-select: none;
             pointer-events: none;
-            filter: drop-shadow(0 0 20px rgba(255, 23, 68, 0.4));
-            opacity: 0; /* Totalmente invisible al inicio */
+            opacity: 0;
         }
 
         button {
@@ -76,42 +60,30 @@
             font-size: 1.2rem;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
             font-weight: bold;
             position: relative;
-            z-index: 110; /* Botón siempre arriba para poder clicarlo */
+            z-index: 110;
             width: 100%;
             max-width: 280px;
+            transition: all 0.3s;
         }
 
-        button:active { transform: scale(0.9); }
-        
         button.finalizado {
-            background-color: #4caf50;
-            border-color: #a5d6a7;
-            cursor: default;
+            background-color: #4caf50 !important;
+            transform: scale(1.1);
         }
 
-        /* Corazoncitos pispileando de fondo */
         .corazon-pispileo {
             position: fixed;
             color: #ff8a80;
             font-size: 20px;
             z-index: 2;
-            animation: pispileo var(--duracion) infinite ease-in-out;
-            opacity: 0;
+            animation: pispileo 2s infinite ease-in-out;
+            opacity: 0.5;
         }
 
-        @keyframes pispileo {
-            0%, 100% { opacity: 0.1; transform: scale(0.8); }
-            50% { opacity: 0.8; transform: scale(1.3); }
-        }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 1.8rem; }
-            #corazon-fondo { font-size: 120px; }
-        }
+        @keyframes pispileo { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
     </style>
 </head>
 <body>
@@ -121,59 +93,35 @@
     <div class="container">
         <h1>¡Feliz Día del Padre!</h1>
         <p>¡Te quiero muchísimo, papá!</p>
-        
         <img class="imagen-papa" src="pdh.png" alt="Papá e hija">
-        
         <br>
         <button id="boton-amor" onclick="crecerAmor()">¡Haz crecer mi amor! ❤</button>
     </div>
 
     <script>
-        let currentScale = 0.5;
-        const maxScale = 3.5; 
-        const crecimientoPorClick = 0.5;
-        let primerClick = true;
-
-        const corazonFondo = document.getElementById('corazon-fondo');
-        const botonAmor = document.getElementById('boton-amor');
-
-        function iniciarCorazones() {
-            for (let i = 0; i < 30; i++) {
-                const cora = document.createElement('div');
-                cora.innerHTML = "❤";
-                cora.className = 'corazon-pispileo';
-                cora.style.left = Math.random() * 100 + "vw";
-                cora.style.top = Math.random() * 100 + "vh";
-                cora.style.setProperty('--duracion', (Math.random() * 2 + 1) + "s");
-                document.body.appendChild(cora);
-            }
-        }
+        let escalaActual = 0.5;
+        const limite = 3.0; // Bajamos el límite para que salga más fácil
+        const incremento = 0.4; // Crece más rápido
 
         function crecerAmor() {
-            // AL PRIMER CLICK: Aparece el corazón
-            if (primerClick) {
-                corazonFondo.style.opacity = "1";
-                primerClick = false;
+            const corazon = document.getElementById('corazon-fondo');
+            const boton = document.getElementById('boton-amor');
+
+            // Mostrar el corazón al primer click
+            corazon.style.opacity = "1";
+
+            if (escalaActual < limite) {
+                escalaActual += incremento;
+                corazon.style.transform = `translate(-50%, -50%) scale(${escalaActual})`;
             }
 
-            if (currentScale >= maxScale) return;
-
-            currentScale += crecimientoPorClick;
-            corazonFondo.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
-
-            if (currentScale >= maxScale) {
-                finalizarCrecimiento();
+            // Si llegamos al límite
+            if (escalaActual >= limite) {
+                boton.innerHTML = "I love youu ❤️";
+                boton.classList.add('finalizado');
+                boton.onclick = null; // Desactiva más clicks
             }
         }
-
-        function finalizarCrecimiento() {
-            botonAmor.innerHTML = "I love youu ❤️";
-            botonAmor.classList.add('finalizado');
-            botonAmor.onclick = null;
-            corazonFondo.style.filter = "drop-shadow(0 0 40px rgba(255, 23, 68, 1))";
-        }
-
-        window.onload = iniciarCorazones;
     </script>
 </body>
 </html>
